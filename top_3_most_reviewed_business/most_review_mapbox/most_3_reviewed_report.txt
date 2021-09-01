@@ -1,0 +1,11 @@
+﻿Each YELP dataset json file is composed of a single object type, one JSON-object per-line. business.json file contains yelp business data including location data, review count and categories, etc. The dataset compiles information on 11 metropolitan areas: Edinburgh (UK), Stuttgart (Germany), Montreal (Canada), Toronto (Canada), Pittsburgh, Charlotte, Champaign-Urbana, Phoenix, Las Vegas, Madison, and Cleveland. The purpose is to extract the top-N most reviewed catering business in a certain city and then locate the selected businesses on an interactive map. We first use pyspark api to filter out all business objects in "Food", "Restaurants" and "Nightlife" categories as catering business data. To aggregate catering data by city/state and rank grouped data based on review_count, we apply pyspark window function Window.partitionBy() to partition the data and use orderBy function to sort data in each group by review count. The top-3 most reviewed catering business is filtered out as output (ordered by city/state).  [most_reviewed.py]
+
+
+https://www.yelp.com/dataset/documentation/main
+
+
+For data visualization, we first convert the output data into GeoJson format and then use MapBox api to build an interactive web map. GeoJSON is a format for encoding a variety of geographic data structures. To convert the filtered data file into GeoJSON file, we define a nested schema according to GeoJSON format, use RDD map function to transform row objects and then convert RDD to defined dataframe. [make_geojson_s1.py] The result file contains multiple json objects so we also need to append each object into one geojson object [make_geojson_s2.py]. With a GeoJSON file containing both geographic features and nonspatial attributes of top-3 most reviewed catering business in each city, we can apply MapBox api functions to plot the result points onto a street map and then add interactive functions such as pop-up window and geocoder search box. [top_3_review_map.html]
+https://geojson.org/ 
+https://docs.mapbox.com/api/ 
+https://docs.mapbox.com/help/tutorials/add-points-pt-1/ 
+https://docs.mapbox.com/mapbox-gl-js/example/mapbox-gl-geocoder/

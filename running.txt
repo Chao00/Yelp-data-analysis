@@ -1,0 +1,10 @@
+### How to run:
+
+> > ```shell
+> > #create conda environment with yml file
+> > conda env create -f environment.yml
+> > #activae environment
+> > source activate project_732
+> > 
+> > ```
+
